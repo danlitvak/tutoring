@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta
+      name="description"
+      content="Explore how a secant slope approaches a tangent slope."
+    >
+    <title>From secant to tangent · Calculus Lab</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link rel="stylesheet" href="./demo.css">
+    <script src="./demo.js" defer></script>
+  </head>
+  <body>
+    <main class="lab-shell">
+      <nav class="lab-nav" aria-label="Breadcrumb">
+        <a href="../../">Calculus Lab</a>
+        <span aria-hidden="true">/</span>
+        <span>Secant to tangent</span>
+      </nav>
+
+      <header class="lab-header">
+        <div>
+          <p class="eyebrow">Slope instrument 01</p>
+          <h1>When does an average slope become instantaneous?</h1>
+        </div>
+        <p>
+          Keep one point fixed. Move the second point closer and watch what
+          happens to the line through them.
+        </p>
+      </header>
+
+      <section class="instrument" aria-label="Interactive secant slope graph">
+        <div class="graph-panel">
+          <canvas
+            id="graph"
+            role="img"
+            aria-label="A coordinate graph showing a function, two points, a secant line, and a tangent line."
+          ></canvas>
+          <div class="graph-legend" aria-hidden="true">
+            <span><i class="function-key"></i> function</span>
+            <span><i class="secant-key"></i> secant</span>
+            <span><i class="tangent-key"></i> tangent</span>
+          </div>
+        </div>
+
+        <div class="readout-panel">
+          <p class="readout-label">Secant slope</p>
+          <div class="slope-fraction" aria-hidden="true">
+            <span id="delta-y">Δy</span>
+            <span id="delta-x">Δx</span>
+          </div>
+          <output id="secant-slope" class="slope-value" aria-live="polite">—</output>
+          <dl class="measurements">
+            <div>
+              <dt>Tangent slope</dt>
+              <dd id="tangent-slope">—</dd>
+            </div>
+            <div>
+              <dt>Difference</dt>
+              <dd id="slope-difference">—</dd>
+            </div>
+          </dl>
+        </div>
+      </section>
+
+      <section class="controls" aria-labelledby="controls-heading">
+        <div class="section-heading">
+          <h2 id="controls-heading">Controls</h2>
+          <button id="guidance-toggle" class="text-button" type="button" aria-pressed="false">
+            Hide guidance
+          </button>
+        </div>
+
+        <div class="control-grid">
+          <label class="field">
+            <span>Function</span>
+            <select id="function-select">
+              <option value="quadratic">f(x) = x²</option>
+              <option value="cubic">f(x) = x³ − x</option>
+              <option value="sine">f(x) = sin(x)</option>
+            </select>
+          </label>
+
+          <label class="field range-field">
+            <span>
+              Fixed point
+              <output id="fixed-point-value" for="fixed-point">a = 1.00</output>
+            </span>
+            <input id="fixed-point" type="range" min="-1.5" max="1.5" step="0.05" value="1">
+          </label>
+
+          <label class="field range-field">
+            <span>
+              Point separation
+              <output id="gap-value" for="gap">Δx = 1.00</output>
+            </span>
+            <input id="gap" type="range" min="0.05" max="1" step="0.05" value="1">
+          </label>
+
+          <fieldset class="field side-field">
+            <legend>Approach from</legend>
+            <div class="segmented-control">
+              <label>
+                <input type="radio" name="side" value="-1">
+                <span>Left</span>
+              </label>
+              <label>
+                <input type="radio" name="side" value="1" checked>
+                <span>Right</span>
+              </label>
+            </div>
+          </fieldset>
+        </div>
+      </section>
+
+      <section id="guidance" class="guidance" aria-labelledby="guidance-heading">
+        <div class="section-heading">
+          <h2 id="guidance-heading">What should I notice?</h2>
+        </div>
+        <div class="guidance-grid">
+          <article>
+            <span class="prompt-mark" aria-hidden="true">?</span>
+            <h3>Predict first</h3>
+            <p>
+              Before moving the points together, will the secant slope increase,
+              decrease, or stay unchanged?
+            </p>
+          </article>
+          <article>
+            <span class="prompt-mark" aria-hidden="true">→</span>
+            <h3>Track the difference</h3>
+            <p>
+              Move <strong>Δx</strong> toward zero. Compare the orange secant
+              slope with the green tangent slope.
+            </p>
+          </article>
+          <article>
+            <span class="prompt-mark" aria-hidden="true">±</span>
+            <h3>Try both sides</h3>
+            <p>
+              Does approaching from the left lead to the same slope as
+              approaching from the right?
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="paper-prompt" aria-labelledby="paper-heading">
+        <p class="eyebrow">Take it to paper</p>
+        <h2 id="paper-heading">
+          Write the secant slope using
+          <span id="paper-function">f(x) = x²</span>.
+        </h2>
+        <p>
+          Simplify the expression, then describe what value it approaches as
+          Δx approaches zero.
+        </p>
+      </section>
+
+      <noscript>
+        <p class="noscript-note">
+          This demonstration requires JavaScript. On paper, choose two points
+          \(a\) and \(a+h\), calculate
+          \([f(a+h)-f(a)]/h\), and examine the result as \(h\) gets closer to
+          zero.
+        </p>
+      </noscript>
+    </main>
+  </body>
+</html>

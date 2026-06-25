@@ -5,25 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta
       name="description"
-      content="Interactive calculus demonstrations by Daniel Litvak."
+      content="Small interactive demonstrations for learning calculus visually."
     >
     <title>Calculus Lab</title>
     <link rel="stylesheet" href="./styles.css">
   </head>
   <body>
-    <main>
-      <p class="eyebrow">Daniel Litvak · Tutoring</p>
-      <h1>Calculus Lab</h1>
-      <p class="intro">
-        Small interactive demonstrations for building intuition before working
-        through the mathematics by hand.
-      </p>
-
-      <section aria-labelledby="demos-heading">
-        <h2 id="demos-heading">Demonstrations</h2>
-        <p class="empty-state">
-          The first demonstration is being prepared.
+    <main class="site-shell">
+      <header class="site-header">
+        <p class="eyebrow">Interactive mathematics</p>
+        <h1>Calculus<br>Lab</h1>
+        <p class="intro">
+          Explore a relationship visually, make a prediction, then take the idea
+          back to pencil and paper.
         </p>
+      </header>
+
+      <section class="demo-index" aria-labelledby="demos-heading">
+        <div class="section-heading">
+          <h2 id="demos-heading">Demonstrations</h2>
+          <p>Each lab focuses on one idea.</p>
+        </div>
+
+        <a class="demo-card" href="./demos/secant-to-tangent/">
+          <span class="demo-number" aria-hidden="true">01</span>
+          <span class="demo-copy">
+            <strong>From secant to tangent</strong>
+            <span>Watch an average slope become an instantaneous slope.</span>
+          </span>
+          <span class="demo-arrow" aria-hidden="true">→</span>
+        </a>
       </section>
     </main>
   </body>
