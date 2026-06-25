@@ -1,0 +1,16 @@
+# Tutor-only workspace. Nothing under this directory may be published.
+/private/
+
+# Legacy location: keep client records out of Git if it is recreated.
+/clients/
+
+# Local working files and secrets.
+/.local/
+.env
+.env.*
+*.key
+*.pem
+
+# Operating-system files.
+.DS_Store
+Thumbs.db
