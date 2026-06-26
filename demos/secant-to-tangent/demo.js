@@ -14,6 +14,9 @@ const slopeDifference = document.querySelector("#slope-difference");
 const paperFunction = document.querySelector("#paper-function");
 const guidance = document.querySelector("#guidance");
 const guidanceToggle = document.querySelector("#guidance-toggle");
+const closeGapButton = document.querySelector("#close-gap");
+const resetButton = document.querySelector("#reset-demo");
+const rightSideInput = document.querySelector('input[name="side"][value="1"]');
 
 const palette = {
   graphite: "#20242a",
@@ -240,11 +243,24 @@ functionSelect.addEventListener("change", update);
 fixedPointInput.addEventListener("input", update);
 gapInput.addEventListener("input", update);
 sideInputs.forEach((input) => input.addEventListener("change", update));
+closeGapButton.addEventListener("click", () => {
+  gapInput.value = gapInput.min;
+  update();
+});
+
+resetButton.addEventListener("click", () => {
+  functionSelect.value = "quadratic";
+  fixedPointInput.value = "1";
+  gapInput.value = "1";
+  rightSideInput.checked = true;
+  update();
+});
+
 guidanceToggle.addEventListener("click", () => {
-  const shouldHide = !guidance.hidden;
-  guidance.hidden = shouldHide;
-  guidanceToggle.textContent = shouldHide ? "Show guidance" : "Hide guidance";
-  guidanceToggle.setAttribute("aria-pressed", String(shouldHide));
+  const shouldShow = guidance.hidden;
+  guidance.hidden = !shouldShow;
+  guidanceToggle.textContent = shouldShow ? "Hide guidance" : "Show guidance";
+  guidanceToggle.setAttribute("aria-expanded", String(shouldShow));
 });
 
 const resizeObserver = new ResizeObserver(resizeCanvas);
