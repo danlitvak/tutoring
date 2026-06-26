@@ -23,30 +23,69 @@
       <header class="lab-header">
         <div>
           <p class="eyebrow">Slope instrument 01</p>
-          <h1>From average slope to instantaneous slope</h1>
+          <h1>Make the secant become the tangent</h1>
         </div>
         <p>
-          Pick a function, move the second point toward the fixed point, and
-          compare the orange secant slope with the green tangent slope.
+          Work directly on the graph: drag point B toward point A and watch the
+          orange line settle into the green tangent.
         </p>
       </header>
 
       <section class="instrument" aria-label="Interactive secant slope graph">
+        <div class="board-toolbar" aria-label="Graph tools">
+          <div class="function-buttons" aria-label="Choose a function">
+            <button class="function-button" type="button" data-function="quadratic" aria-pressed="true">
+              f(x) = x²
+            </button>
+            <button class="function-button" type="button" data-function="cubic" aria-pressed="false">
+              f(x) = x³ − x
+            </button>
+            <button class="function-button" type="button" data-function="sine" aria-pressed="false">
+              f(x) = sin(x)
+            </button>
+          </div>
+
+          <div class="board-actions">
+            <button id="close-gap" class="secondary-button" type="button">
+              Bring B close
+            </button>
+            <button id="switch-side" class="secondary-button" type="button">
+              Swap side
+            </button>
+            <button id="reset-demo" class="secondary-button" type="button">
+              Reset
+            </button>
+            <button
+              id="guidance-toggle"
+              class="text-button"
+              type="button"
+              aria-controls="guidance"
+              aria-expanded="false"
+            >
+              Show guidance
+            </button>
+          </div>
+        </div>
+
         <div class="graph-panel">
           <canvas
             id="graph"
+            tabindex="0"
             role="img"
+            aria-describedby="board-instructions"
             aria-label="A coordinate graph showing a function, two points, a secant line, and a tangent line."
           ></canvas>
+          <p id="board-instructions" class="board-instructions">
+            Drag orange B toward blue A. Drag blue A to move the fixed point.
+            Keyboard: press A or B, then use arrow keys.
+          </p>
           <div class="graph-legend" aria-hidden="true">
             <span><i class="function-key"></i> function</span>
             <span><i class="secant-key"></i> secant</span>
             <span><i class="tangent-key"></i> tangent</span>
           </div>
-        </div>
 
-        <aside class="work-panel" aria-label="Slope controls and readout">
-          <div class="readout-panel">
+          <aside class="readout-panel" aria-label="Live slope readout">
             <p class="readout-label">Secant slope</p>
             <div class="slope-fraction" aria-hidden="true">
               <span id="delta-y">Δy</span>
@@ -54,6 +93,14 @@
             </div>
             <output id="secant-slope" class="slope-value" aria-live="polite">—</output>
             <dl class="measurements">
+              <div>
+                <dt>Fixed point</dt>
+                <dd><output id="fixed-point-value">a = 1.00</output></dd>
+              </div>
+              <div>
+                <dt>Separation</dt>
+                <dd><output id="gap-value">Δx = 1.00</output></dd>
+              </div>
               <div>
                 <dt>Tangent slope</dt>
                 <dd id="tangent-slope">—</dd>
@@ -63,93 +110,8 @@
                 <dd id="slope-difference">—</dd>
               </div>
             </dl>
-          </div>
-
-          <section class="controls" aria-labelledby="controls-heading">
-            <div class="section-heading">
-              <h2 id="controls-heading">Try it</h2>
-              <button
-                id="guidance-toggle"
-                class="text-button"
-                type="button"
-                aria-controls="guidance"
-                aria-expanded="false"
-              >
-                Show guidance
-              </button>
-            </div>
-
-            <p class="control-hint">
-              Start by dragging <strong>Point separation</strong> toward zero.
-            </p>
-
-            <div class="control-grid">
-              <label class="field">
-                <span>Function</span>
-                <select id="function-select">
-                  <option value="quadratic">f(x) = x²</option>
-                  <option value="cubic">f(x) = x³ − x</option>
-                  <option value="sine">f(x) = sin(x)</option>
-                </select>
-              </label>
-
-              <label class="field range-field">
-                <span>
-                  Fixed point
-                  <output id="fixed-point-value" for="fixed-point">a = 1.00</output>
-                </span>
-                <input
-                  id="fixed-point"
-                  type="range"
-                  min="-1.5"
-                  max="1.5"
-                  step="0.05"
-                  value="1"
-                  aria-label="Fixed point x-coordinate"
-                >
-              </label>
-
-              <label class="field range-field">
-                <span>
-                  Point separation
-                  <output id="gap-value" for="gap">Δx = 1.00</output>
-                </span>
-                <input
-                  id="gap"
-                  type="range"
-                  min="0.05"
-                  max="1"
-                  step="0.05"
-                  value="1"
-                  aria-label="Point separation delta x"
-                >
-              </label>
-
-              <fieldset class="field side-field">
-                <legend>Approach from</legend>
-                <div class="segmented-control">
-                  <label>
-                    <input type="radio" name="side" value="-1">
-                    <span>Left</span>
-                  </label>
-                  <label>
-                    <input type="radio" name="side" value="1" checked>
-                    <span>Right</span>
-                  </label>
-                </div>
-              </fieldset>
-
-              <div class="quick-actions" aria-label="Helpful actions">
-                <button id="close-gap" class="secondary-button" type="button">
-                  Bring points close
-                </button>
-                <button id="reset-demo" class="secondary-button" type="button">
-                  Reset
-                </button>
-              </div>
-            </div>
-          </section>
-        </aside>
+          </aside>
+        </div>
       </section>
 
       <section id="guidance" class="guidance" aria-labelledby="guidance-heading" hidden>
@@ -159,26 +121,26 @@
         <div class="guidance-grid">
           <article>
             <span class="prompt-mark" aria-hidden="true">?</span>
-            <h3>Predict first</h3>
+            <h3>Grab the point</h3>
             <p>
-              Before moving the points together, will the secant slope increase,
-              decrease, or stay unchanged?
+              Move orange B before calculating. Ask whether the secant slope
+              should increase, decrease, or stay unchanged.
             </p>
           </article>
           <article>
             <span class="prompt-mark" aria-hidden="true">→</span>
             <h3>Track the difference</h3>
             <p>
-              Move <strong>Δx</strong> toward zero. Compare the orange secant
-              slope with the green tangent slope.
+              Drag B toward A. Compare the orange secant slope with the green
+              tangent slope as the gap shrinks.
             </p>
           </article>
           <article>
             <span class="prompt-mark" aria-hidden="true">±</span>
             <h3>Try both sides</h3>
             <p>
-              Does approaching from the left lead to the same slope as
-              approaching from the right?
+              Drag B across A. Does approaching from the left lead to the same
+              slope as approaching from the right?
             </p>
           </article>
         </div>
