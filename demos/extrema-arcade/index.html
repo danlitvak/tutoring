@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta
+      name="description"
+      content="A reaction game for naming local and global maxima and minima on a scrolling curve."
+    >
+    <title>Extrema Arcade · Calculus Lab</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link rel="stylesheet" href="./demo.css">
+    <script src="./demo.js" defer></script>
+  </head>
+  <body>
+    <main class="lab-shell">
+      <nav class="lab-nav" aria-label="Breadcrumb">
+        <a href="../../">Calculus Lab</a>
+        <span aria-hidden="true">/</span>
+        <span>Extrema Arcade</span>
+      </nav>
+
+      <header class="lab-header">
+        <div>
+          <p class="eyebrow">Arcade instrument 02</p>
+          <h1>Name that extremum</h1>
+        </div>
+        <p>
+          A curve scrolls past. Each highlighted point freezes in the gate —
+          call it a local max, a local min, or neither before it slides away.
+          Then tag the global high and low.
+        </p>
+      </header>
+
+      <section class="instrument" aria-label="Extrema classification game">
+        <div class="board-toolbar" aria-label="Game controls">
+          <div class="hud" aria-live="off">
+            <div class="hud-cell">
+              <span class="hud-label">Score</span>
+              <output id="score" class="hud-value">0</output>
+            </div>
+            <div class="hud-cell">
+              <span class="hud-label">Streak</span>
+              <output id="streak" class="hud-value">0</output>
+            </div>
+            <div class="hud-cell">
+              <span class="hud-label">Accuracy</span>
+              <output id="accuracy" class="hud-value">—</output>
+            </div>
+            <div class="hud-cell">
+              <span class="hud-label">Level</span>
+              <output id="level" class="hud-value">1</output>
+            </div>
+          </div>
+
+          <div class="board-actions">
+            <button id="playpause" class="secondary-button" type="button">Pause</button>
+            <button id="restart" class="secondary-button" type="button">Restart</button>
+            <button
+              id="calm-toggle"
+              class="secondary-button"
+              type="button"
+              aria-pressed="false"
+            >
+              Calm mode
+            </button>
+            <button
+              id="guidance-toggle"
+              class="text-button"
+              type="button"
+              aria-controls="guidance"
+              aria-expanded="false"
+            >
+              Show guidance
+            </button>
+          </div>
+        </div>
+
+        <div class="stage-panel">
+          <canvas
+            id="stage"
+            tabindex="0"
+            role="img"
+            aria-describedby="stage-instructions"
+            aria-label="A scrolling coordinate graph. Highlighted points freeze in the centre for you to classify."
+          ></canvas>
+
+          <div class="stage-legend" aria-hidden="true">
+            <span><i class="curve-key"></i> f(x)</span>
+            <span><i class="poi-key"></i> point of interest</span>
+            <span><i class="gate-key"></i> gate</span>
+          </div>
+
+          <p id="stage-instructions" class="stage-instructions">
+            Keys: 1 local max · 2 local min · 3 global max · 4 global min ·
+            5 neither. Space to start or pause, R to restart.
+          </p>
+
+          <!-- Classification controls: real buttons, mirrored by number keys. -->
+          <div id="classify" class="classify" role="group" aria-label="Classify the frozen point">
+            <button class="choice-button" type="button" data-choice="lmax">
+              <span class="choice-key" aria-hidden="true">1</span>
+              Local max
+            </button>
+            <button class="choice-button" type="button" data-choice="lmin">
+              <span class="choice-key" aria-hidden="true">2</span>
+              Local min
+            </button>
+            <button class="choice-button" type="button" data-choice="gmax">
+              <span class="choice-key" aria-hidden="true">3</span>
+              Global max
+            </button>
+            <button class="choice-button" type="button" data-choice="gmin">
+              <span class="choice-key" aria-hidden="true">4</span>
+              Global min
+            </button>
+            <button class="choice-button" type="button" data-choice="neither">
+              <span class="choice-key" aria-hidden="true">5</span>
+              Neither
+            </button>
+          </div>
+
+          <p id="prompt" class="stage-prompt" aria-live="polite"></p>
+          <output id="flash" class="stage-flash" aria-live="assertive"></output>
+
+          <!-- Start overlay -->
+          <div id="start-overlay" class="stage-overlay">
+            <div class="overlay-card">
+              <p class="eyebrow">How to play</p>
+              <h2>Read the curve, fast</h2>
+              <p>
+                A function scrolls past. When a marked point freezes between the
+                gate lines, name it before the timer empties.
+              </p>
+              <p>
+                Is it a <strong>local</strong> max or min — just a peak or a
+                valley — or the <strong>global</strong> max or min, the single
+                highest or lowest point anywhere between the left and right
+                edges of the screen? And watch for traps: some marked points are
+                not turning points at all. Those are <strong>neither</strong>.
+              </p>
+              <button id="start-button" class="primary-button" type="button">
+                Start level 1
+              </button>
+            </div>
+          </div>
+
+          <!-- End-of-level summary overlay -->
+          <div id="summary-overlay" class="stage-overlay" hidden>
+            <div class="overlay-card">
+              <p class="eyebrow" id="summary-eyebrow">Level complete</p>
+              <h2 id="summary-title">Nicely read.</h2>
+              <dl class="summary-stats" id="summary-stats"></dl>
+              <div class="overlay-actions">
+                <button id="next-level" class="primary-button" type="button">
+                  Next level
+                </button>
+                <button id="replay-level" class="secondary-button" type="button">
+                  Replay
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="guidance" class="guidance" aria-labelledby="guidance-heading" hidden>
+        <div class="section-heading">
+          <h2 id="guidance-heading">What should I notice?</h2>
+        </div>
+        <div class="guidance-grid">
+          <article>
+            <span class="prompt-mark" aria-hidden="true">∩</span>
+            <h3>Peaks and valleys</h3>
+            <p>
+              At a local max the curve rises then falls, so the slope goes from
+              positive to negative. At a local min it is the reverse. Feel the
+              slope flip, do not just look at the height.
+            </p>
+          </article>
+          <article>
+            <span class="prompt-mark" aria-hidden="true">≈</span>
+            <h3>The “neither” trap</h3>
+            <p>
+              A marked point can be a decoy. The curve is climbing or falling
+              straight through it — it is not a turning point at all, it only
+              looks important because it is highlighted. That is neither a max
+              nor a min.
+            </p>
+          </article>
+          <article>
+            <span class="prompt-mark" aria-hidden="true">▲</span>
+            <h3>Local versus global</h3>
+            <p>
+              A local max is any peak. The global max is the single highest
+              point between the left and right edges of the screen right now —
+              a peak, or the curve at the very edge. Scan the whole screen
+              before you commit.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="paper-prompt" aria-labelledby="paper-heading">
+        <p class="eyebrow">Take it to paper</p>
+        <h2 id="paper-heading">
+          For a function you know, find every <span>critical point</span> and
+          sort it.
+        </h2>
+        <p>
+          Solve f′(x) = 0. At each solution, check the sign of f′ just before
+          and just after: positive-to-negative is a local max,
+          negative-to-positive is a local min, and no change is neither. Then
+          compare those heights against f at the endpoints to find the global
+          extremes.
+        </p>
+      </section>
+
+      <noscript>
+        <p class="noscript-note">
+          This game needs JavaScript. On paper: given f, solve f′(x) = 0, use
+          the sign of f′ on each side to label each critical point as a local
+          max, local min, or neither, then compare those values with f at the
+          endpoints to find the global maximum and minimum.
+        </p>
+      </noscript>
+    </main>
+  </body>
+</html>
